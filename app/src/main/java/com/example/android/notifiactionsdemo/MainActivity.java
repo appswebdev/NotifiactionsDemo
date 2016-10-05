@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //delete all existing notifications.
+        NotificationManagerCompat.from(this).cancel(NOTIFY_HELLO);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
@@ -55,14 +57,25 @@ public class MainActivity extends AppCompatActivity {
                 .setSummaryText(getString(R.string.short_summary));
 
         */
-        NotificationCompat.BigPictureStyle bigPictureStyle  = new android.support.v4.app.NotificationCompat.BigPictureStyle();
+
+        //init a bitmap
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.android_n);
+        //init the style
+
+        NotificationCompat.BigPictureStyle bigPictureStyle = new android.support.v4.app.NotificationCompat.BigPictureStyle();
+        //set properties of the style
+        bigPictureStyle.bigPicture(bitmap)
+                .bigLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_dismiss))
+                .setBigContentTitle("The Big title")
+                .setSummaryText("Summary Text");
+
 
 
         builder.setContentTitle(getString(R.string.notification_title)).
                 setContentText(getString(R.string.content_text)).
                 setSmallIcon(R.mipmap.ic_launcher).
                 setContentIntent(getPendingIntent()).
+                setStyle(bigPictureStyle).
                 //addAction(R.drawable.ic_reply, getString(R.string.action_reply), getPendingIntentReply()).
                 //addAction(R.drawable.ic_dismiss, getString(R.string.dismiss_action), getPendingIntent()).
                 //addAction(R.drawable.ic_stat_name, getString(R.string.close_action), getPendingIntent()).
