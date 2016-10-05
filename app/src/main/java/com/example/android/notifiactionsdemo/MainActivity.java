@@ -4,6 +4,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_NOTIFICATION_REPLY = 12;
     private int NOTIFY_HELLO = 10;
     private int REQUEST_NOTIFICATION = 11;
 
@@ -43,11 +46,27 @@ public class MainActivity extends AppCompatActivity {
         //AlertDialog.Builder
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
-        builder.setContentTitle("The Title").
-                setContentText("Content Text").
+        /*
+        //init a big text style
+        NotificationCompat.BigTextStyle textStyle = new android.support.v4.app.NotificationCompat.BigTextStyle();
+
+        textStyle.bigText(getString(R.string.big_text))
+                .setBigContentTitle(getString(R.string.title_when_open))
+                .setSummaryText(getString(R.string.short_summary));
+
+        */
+        NotificationCompat.BigPictureStyle bigPictureStyle  = new android.support.v4.app.NotificationCompat.BigPictureStyle();
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.android_n);
+
+
+        builder.setContentTitle(getString(R.string.notification_title)).
+                setContentText(getString(R.string.content_text)).
                 setSmallIcon(R.mipmap.ic_launcher).
                 setContentIntent(getPendingIntent()).
-                //addAction()
+                //addAction(R.drawable.ic_reply, getString(R.string.action_reply), getPendingIntentReply()).
+                //addAction(R.drawable.ic_dismiss, getString(R.string.dismiss_action), getPendingIntent()).
+                //addAction(R.drawable.ic_stat_name, getString(R.string.close_action), getPendingIntent()).
+        //        setStyle(textStyle).
                 setAutoCancel(true);
 
         //done building the notification
@@ -59,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         //3) dispatch the notification:
         notificationManager.notify(NOTIFY_HELLO, notification);
     }
+
     public PendingIntent getPendingIntent() {
         //first we create an intent
         Intent intent = new Intent(this, MainActivity.class);
@@ -69,6 +89,23 @@ public class MainActivity extends AppCompatActivity {
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
     }
+
+
+    public PendingIntent getPendingIntentReply() {
+        //first we create an intent
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("ReplyID", 101);
+        intent.putExtra("sender", 101);
+        //get Activity - creates or updates an existing Pending Intent
+        return PendingIntent.getActivity(this,
+                REQUEST_NOTIFICATION_REPLY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+    }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
